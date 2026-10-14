@@ -153,7 +153,7 @@ export default function App() {
             onClick={handlePdf}
             disabled={Boolean(busy)}
           >
-            {busy === 'pdf' ? 'Building PDF…' : 'PDF · Print (both sides)'}
+            {busy === 'pdf' ? 'Building PDF…' : 'PDF · Print (both sides · 3 mm bleed)'}
           </button>
         </div>
       </header>

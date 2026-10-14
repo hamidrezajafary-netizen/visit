@@ -55,6 +55,13 @@ Vite answers on port 3000.
   (`.card-bleed`, 95 × 57 mm) and the digital PNG captures the trim element
   (`.card-trim`, 89 × 51 mm) — the trim element therefore needs its own opaque
   background, or the PNG comes out with transparent edges.
+- **The print PDF is one page per side on a 103 × 65 mm sheet**: the 95 × 57 mm
+  bleed placed at 4 mm (`TRIM_MARK_GUTTER`), with corner trim marks drawn in that
+  slug so they can never land on the trimmed card. 300 DPI comes from the raster
+  ratio, so the bleed stays exactly 3 mm per edge. Verified by driving the button
+  in the preview: the export runs clean and the rig measures 95 × 57 mm bleed /
+  89 × 51 mm trim at 300 DPI. The generated PDF itself cannot be opened in the
+  sandbox browser, so its page internals are not machine-checked here.
 - **The export rig is always mounted and lives outside the mockup.** Export uses
   an off-screen copy at a fixed `--mm`, so exporting works from any preview mode
   and is unaffected by the stage's 3D transforms and rounded-corner clipping.
