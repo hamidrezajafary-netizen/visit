@@ -1,0 +1,38 @@
+# Base44 sandbox environment for the Maison AI Business Card Studio.
+#
+# Runs the app straight from the cloned source with Vite's dev server (live reload),
+# so edits are visible in the preview without rebuilding anything.
+# No external services or credentials are required — QR codes, PNG and PDF export
+# are all generated in the browser.
+
+services:
+  web:
+    image: node:22
+    working_dir: /app
+    # Dependencies live in the named volume below, so install on startup once the
+    # mounts are in place, then hand over to the dev server.
+    command: ["sh", "-ec", "npm install --no-audit --no-fund && exec npm run dev"]
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    environment:
+      - BASE44_PREVIEW_MODE
+      - BASE44_SANDBOX_HOST_DOMAIN
+      - BASE44_PUBLIC_HOST_SUFFIX
+      - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 180s
+    restart: on-failure
+
+volumes:
+  node_modules:

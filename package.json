@@ -1,0 +1,26 @@
+{
+  "name": "maison-ai-business-card-studio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Design, preview and export the Maison AI business card (85 x 55 mm, 3 mm bleed).",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.1.0",
+    "@fontsource/manrope": "^5.1.0",
+    "@fontsource/plus-jakarta-sans": "^5.1.0",
+    "html-to-image": "^1.11.11",
+    "jspdf": "^2.5.2",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.0"
+  }
+}

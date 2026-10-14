@@ -1,0 +1,317 @@
+/*
+ * The card is laid out in true millimetres through a single --mm unit.
+ *   .card-bleed : 91 × 61 mm  (85 × 55 trim + 3 mm bleed all round)
+ *   .card-trim  : 85 × 55 mm with a 6 mm safe margin
+ * Change --mm and the whole card scales — no other value needs to move,
+ * which is what lets the preview, the 300 DPI PNG and the print PDF all
+ * come from the same markup.
+ */
+
+.card-bleed {
+  position: relative;
+  display: block;
+  width: calc(91 * var(--mm));
+  height: calc(61 * var(--mm));
+  background-color: var(--card-bg);
+  font-family: var(--font);
+  line-height: 1.2;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.card-bleed--front {
+  --card-bg: var(--primary);
+  --on-card: var(--on-primary);
+  --on-card-muted: var(--on-primary-muted);
+}
+
+.card-bleed--back {
+  --card-bg: var(--surface);
+  --on-card: var(--on-surface);
+  --on-card-muted: var(--on-surface-muted);
+}
+
+.card-trim {
+  position: absolute;
+  inset: calc(3 * var(--mm));
+  background-color: var(--card-bg);
+  color: var(--on-card);
+  overflow: hidden;
+  padding: calc(6 * var(--mm));
+}
+
+.face {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- print guides (screen only) ---------- */
+
+.card-guides {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.guide {
+  position: absolute;
+}
+
+.guide--bleed {
+  inset: 0;
+  outline: 2px dashed rgba(0, 200, 255, 0.9);
+  outline-offset: -1px;
+}
+
+.guide--trim {
+  inset: calc(3 * var(--mm));
+  outline: 2px solid rgba(255, 0, 140, 0.9);
+  outline-offset: -1px;
+}
+
+.guide--safe {
+  inset: calc(9 * var(--mm));
+  outline: 2px dashed rgba(255, 196, 0, 0.9);
+  outline-offset: -1px;
+}
+
+/* ---------- front ---------- */
+
+.face--front {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.network-motif {
+  position: absolute;
+  right: calc(-7 * var(--mm));
+  bottom: calc(-9 * var(--mm));
+  width: calc(62 * var(--mm));
+  height: calc(37 * var(--mm));
+  opacity: 0.24;
+}
+
+.front-head {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.front-logo {
+  display: block;
+  width: calc(8 * var(--mm));
+  height: calc(8 * var(--mm));
+  color: var(--on-primary);
+}
+
+.front-body {
+  position: relative;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: calc(1.5 * var(--mm));
+}
+
+.front-wordmark {
+  margin: 0;
+  font-size: calc(7.3 * var(--mm));
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--on-primary);
+}
+
+.front-supporting {
+  margin: 0;
+  font-size: calc(2 * var(--mm));
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.front-rule {
+  display: block;
+  width: calc(11 * var(--mm));
+  height: calc(0.8 * var(--mm));
+  background: var(--accent);
+  margin: calc(1.5 * var(--mm)) 0 calc(0.3 * var(--mm));
+}
+
+.front-tagline {
+  margin: 0;
+  font-size: calc(3.3 * var(--mm));
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--on-primary);
+}
+
+/* ---------- back ---------- */
+
+.face--back {
+  display: flex;
+  flex-direction: column;
+  gap: calc(2.4 * var(--mm));
+}
+
+.back-head {
+  display: flex;
+  align-items: center;
+  gap: calc(1.7 * var(--mm));
+}
+
+.back-logo {
+  display: block;
+  width: calc(4.6 * var(--mm));
+  height: calc(4.6 * var(--mm));
+  color: var(--on-surface);
+}
+
+.back-wordmark {
+  font-size: calc(2.4 * var(--mm));
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--on-surface);
+  white-space: nowrap;
+}
+
+.back-hairline {
+  flex: 1 1 auto;
+  height: calc(0.25 * var(--mm));
+  background: var(--hairline);
+}
+
+.back-main {
+  display: flex;
+  flex: 1 1 auto;
+  gap: calc(3 * var(--mm));
+  min-height: 0;
+}
+
+.back-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.back-name {
+  margin: 0;
+  font-size: calc(4 * var(--mm));
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  color: var(--on-surface);
+}
+
+.back-title {
+  margin: calc(0.9 * var(--mm)) 0 0;
+  font-size: calc(1.9 * var(--mm));
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  color: var(--accent);
+}
+
+.back-services {
+  margin: calc(2 * var(--mm)) 0 0;
+  font-size: calc(2 * var(--mm));
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--on-surface-muted);
+}
+
+.back-contacts {
+  margin: auto 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: calc(1.05 * var(--mm));
+  font-size: calc(2 * var(--mm));
+  font-weight: 500;
+}
+
+.back-contacts li {
+  display: flex;
+  align-items: center;
+  gap: calc(1.4 * var(--mm));
+  color: var(--on-surface);
+}
+
+.back-contacts svg {
+  flex: 0 0 auto;
+  width: calc(2.1 * var(--mm));
+  height: calc(2.1 * var(--mm));
+  color: var(--accent);
+}
+
+.back-qr {
+  flex: 0 0 auto;
+  width: calc(18 * var(--mm));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(1 * var(--mm));
+}
+
+.qr-tile {
+  width: calc(18 * var(--mm));
+  height: calc(18 * var(--mm));
+  padding: calc(1.3 * var(--mm));
+  background: #ffffff;
+  border: calc(0.25 * var(--mm)) solid var(--hairline);
+  border-radius: calc(0.9 * var(--mm));
+  display: flex;
+}
+
+.qr-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.qr-empty {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: calc(0.25 * var(--mm)) dashed var(--hairline);
+  font-size: calc(2 * var(--mm));
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--on-surface-muted);
+}
+
+.qr-caption {
+  margin: 0;
+  font-size: calc(1.55 * var(--mm));
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  text-align: center;
+  color: var(--on-surface-muted);
+}
+
+.back-foot {
+  display: flex;
+  align-items: center;
+  gap: calc(1.2 * var(--mm));
+  font-size: calc(1.75 * var(--mm));
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--on-surface-muted);
+}
+
+.foot-dot {
+  flex: 0 0 auto;
+  width: calc(1.1 * var(--mm));
+  height: calc(1.1 * var(--mm));
+  border-radius: 50%;
+  background: var(--accent);
+}
