@@ -1,22 +1,23 @@
 /*
  * The card is laid out in true millimetres through a single --mm unit.
- *   .card-bleed : 91 × 61 mm  (85 × 55 trim + 3 mm bleed all round)
- *   .card-trim  : 85 × 55 mm with a 6 mm safe margin
- * Change --mm and the whole card scales — no other value needs to move,
- * which is what lets the preview, the 300 DPI PNG and the print PDF all
- * come from the same markup.
+ *   .card-bleed : 95 × 57 mm  (89 × 51 trim + 3 mm bleed all round)
+ *   .card-trim  : 89 × 51 mm  (3.5 × 2 in) with a 5 mm safe margin
+ * Change --mm and the whole card scales — no other value needs to move, which is
+ * what lets the preview, the 300 DPI PNG and the print PDF come from one markup.
  */
 
 .card-bleed {
   position: relative;
   display: block;
-  width: calc(91 * var(--mm));
-  height: calc(61 * var(--mm));
+  width: calc(95 * var(--mm));
+  height: calc(57 * var(--mm));
   background-color: var(--card-bg);
   font-family: var(--font);
   line-height: 1.2;
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
+  /* height of the gilded strip along the bottom of the back */
+  --strip-h: calc(10 * var(--mm));
 }
 
 .card-bleed--front {
@@ -35,14 +36,37 @@
   position: absolute;
   inset: calc(3 * var(--mm));
   background-color: var(--card-bg);
+  /* soft-touch matte: a fine woven grain plus a cinematic light fall */
+  background-image: radial-gradient(
+      118% 88% at 20% 4%,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 58%
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 62%, rgba(0, 0, 0, 0.26) 100%),
+    repeating-linear-gradient(52deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(-38deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 4px);
   color: var(--on-card);
   overflow: hidden;
-  padding: calc(6 * var(--mm));
 }
 
 .face {
   width: 100%;
   height: 100%;
+}
+
+/*
+ * The gilded bottom edge must run off the trim, or a sliver of purple would show
+ * after cutting. It is drawn behind .card-trim (which paints its own opaque
+ * background over the trim area) and extends the full width of the bleed.
+ */
+.card-bleed--back::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--strip-h) + 3 * var(--mm));
+  background: var(--accent);
 }
 
 /* ---------- print guides (screen only) ---------- */
@@ -70,7 +94,7 @@
 }
 
 .guide--safe {
-  inset: calc(9 * var(--mm));
+  inset: calc(8 * var(--mm));
   outline: 2px dashed rgba(255, 196, 0, 0.9);
   outline-offset: -1px;
 }
@@ -78,81 +102,95 @@
 /* ---------- front ---------- */
 
 .face--front {
-  position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: calc(5 * var(--mm));
 }
 
-.network-motif {
-  position: absolute;
-  right: calc(-7 * var(--mm));
-  bottom: calc(-9 * var(--mm));
-  width: calc(62 * var(--mm));
-  height: calc(37 * var(--mm));
-  opacity: 0.24;
-}
-
-.front-head {
-  position: relative;
-  flex: 0 0 auto;
-}
-
-.front-logo {
+.front-mark {
   display: block;
-  width: calc(8 * var(--mm));
-  height: calc(8 * var(--mm));
-  color: var(--on-primary);
-}
-
-.front-body {
-  position: relative;
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  gap: calc(1.5 * var(--mm));
-}
-
-.front-wordmark {
-  margin: 0;
-  font-size: calc(7.3 * var(--mm));
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  line-height: 1;
-  color: var(--on-primary);
-}
-
-.front-supporting {
-  margin: 0;
-  font-size: calc(2 * var(--mm));
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  width: calc(21 * var(--mm));
+  height: auto;
   color: var(--accent);
 }
 
+.front-wordmark {
+  margin: calc(2.5 * var(--mm)) -0.24em 0 0;
+  font-size: calc(5.6 * var(--mm));
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--accent);
+  text-shadow: 0 0.07em 0.02em rgba(0, 0, 0, 0.5), 0 -0.035em 0.02em rgba(255, 255, 255, 0.16);
+}
+
+.front-supporting {
+  margin: calc(1.2 * var(--mm)) -0.22em 0 0;
+  font-size: calc(1.65 * var(--mm));
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--on-primary-muted);
+}
+
 .front-rule {
+  position: relative;
   display: block;
-  width: calc(11 * var(--mm));
-  height: calc(0.8 * var(--mm));
+  width: calc(17 * var(--mm));
+  height: calc(0.35 * var(--mm));
+  margin: calc(2.4 * var(--mm)) 0 calc(1.8 * var(--mm));
+  background: linear-gradient(90deg, var(--accent-dark), var(--accent-light), var(--accent-dark));
+}
+
+.front-rule i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(1.8 * var(--mm));
+  height: calc(1.8 * var(--mm));
   background: var(--accent);
-  margin: calc(1.5 * var(--mm)) 0 calc(0.3 * var(--mm));
+  transform: translate(-50%, -50%) rotate(45deg);
+  box-shadow: 0 0 0 calc(0.75 * var(--mm)) var(--card-bg);
 }
 
 .front-tagline {
   margin: 0;
-  font-size: calc(3.3 * var(--mm));
+  font-size: calc(2.4 * var(--mm));
   font-weight: 500;
-  line-height: 1.25;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
   color: var(--on-primary);
 }
 
 /* ---------- back ---------- */
 
 .face--back {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: calc(2.4 * var(--mm));
+}
+
+.back-lattice {
+  position: absolute;
+  top: calc(-6 * var(--mm));
+  right: calc(-8 * var(--mm));
+  width: calc(58 * var(--mm));
+  height: auto;
+  color: var(--accent);
+  opacity: 0.17;
+}
+
+.back-inner {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  padding: calc(5 * var(--mm)) calc(5 * var(--mm)) calc(4 * var(--mm));
 }
 
 .back-head {
@@ -163,65 +201,58 @@
 
 .back-logo {
   display: block;
-  width: calc(4.6 * var(--mm));
-  height: calc(4.6 * var(--mm));
-  color: var(--on-surface);
+  width: calc(4.2 * var(--mm));
+  height: calc(4.2 * var(--mm));
+  color: var(--accent);
 }
 
 .back-wordmark {
-  font-size: calc(2.4 * var(--mm));
+  font-size: calc(2.3 * var(--mm));
   font-weight: 800;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--on-surface);
   white-space: nowrap;
+  color: var(--on-surface);
 }
 
 .back-hairline {
   flex: 1 1 auto;
   height: calc(0.25 * var(--mm));
-  background: var(--hairline);
+  background: var(--gold-soft);
 }
 
 .back-main {
   display: flex;
   flex: 1 1 auto;
-  gap: calc(3 * var(--mm));
+  gap: calc(4 * var(--mm));
   min-height: 0;
+  margin-top: calc(2.6 * var(--mm));
 }
 
 .back-info {
   display: flex;
-  flex-direction: column;
   flex: 1 1 auto;
+  flex-direction: column;
   min-width: 0;
 }
 
 .back-name {
   margin: 0;
-  font-size: calc(4 * var(--mm));
-  font-weight: 800;
+  font-size: calc(3.6 * var(--mm));
+  font-weight: 700;
   line-height: 1.05;
-  letter-spacing: -0.005em;
+  letter-spacing: 0.01em;
   color: var(--on-surface);
 }
 
 .back-title {
   margin: calc(0.9 * var(--mm)) 0 0;
-  font-size: calc(1.9 * var(--mm));
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-size: calc(1.8 * var(--mm));
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   line-height: 1.3;
   color: var(--accent);
-}
-
-.back-services {
-  margin: calc(2 * var(--mm)) 0 0;
-  font-size: calc(2 * var(--mm));
-  font-weight: 500;
-  line-height: 1.4;
-  color: var(--on-surface-muted);
 }
 
 .back-contacts {
@@ -230,8 +261,8 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: calc(1.05 * var(--mm));
-  font-size: calc(2 * var(--mm));
+  gap: calc(1.15 * var(--mm));
+  font-size: calc(1.95 * var(--mm));
   font-weight: 500;
 }
 
@@ -250,22 +281,23 @@
 }
 
 .back-qr {
-  flex: 0 0 auto;
-  width: calc(18 * var(--mm));
   display: flex;
+  flex: 0 0 auto;
+  align-self: flex-end;
   flex-direction: column;
   align-items: center;
   gap: calc(1 * var(--mm));
+  width: calc(17 * var(--mm));
 }
 
 .qr-tile {
-  width: calc(18 * var(--mm));
-  height: calc(18 * var(--mm));
-  padding: calc(1.3 * var(--mm));
-  background: #ffffff;
-  border: calc(0.25 * var(--mm)) solid var(--hairline);
-  border-radius: calc(0.9 * var(--mm));
   display: flex;
+  width: calc(17 * var(--mm));
+  height: calc(17 * var(--mm));
+  padding: calc(1.1 * var(--mm));
+  background: var(--qr-tile);
+  border-radius: calc(0.8 * var(--mm));
+  box-shadow: 0 calc(0.8 * var(--mm)) calc(2.4 * var(--mm)) rgba(0, 0, 0, 0.4);
 }
 
 .qr-img {
@@ -275,43 +307,63 @@
   object-fit: contain;
 }
 
-.qr-empty {
-  flex: 1 1 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: calc(0.25 * var(--mm)) dashed var(--hairline);
-  font-size: calc(2 * var(--mm));
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--on-surface-muted);
-}
-
 .qr-caption {
   margin: 0;
-  font-size: calc(1.55 * var(--mm));
+  font-size: calc(1.4 * var(--mm));
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   line-height: 1.3;
   text-align: center;
-  color: var(--on-surface-muted);
+  color: var(--accent);
 }
 
-.back-foot {
+.back-status {
   display: flex;
   align-items: center;
   gap: calc(1.2 * var(--mm));
-  font-size: calc(1.75 * var(--mm));
+  margin: calc(1.6 * var(--mm)) 0 0;
+  font-size: calc(1.7 * var(--mm));
   font-weight: 500;
-  letter-spacing: 0.02em;
   color: var(--on-surface-muted);
 }
 
-.foot-dot {
+.status-dot {
   flex: 0 0 auto;
   width: calc(1.1 * var(--mm));
   height: calc(1.1 * var(--mm));
   border-radius: 50%;
   background: var(--accent);
+}
+
+.back-strip {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  height: var(--strip-h);
+  padding: 0 calc(5 * var(--mm));
+  background: var(--accent);
+  color: var(--strip-ink);
+}
+
+/* diagonal foil sheen, kept inside the trim so it cannot seam against the bleed */
+.back-strip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    104deg,
+    rgba(255, 255, 255, 0.36) 0%,
+    rgba(255, 255, 255, 0) 44%,
+    rgba(0, 0, 0, 0.18) 100%
+  );
+}
+
+.back-strip-text {
+  position: relative;
+  font-size: calc(1.8 * var(--mm));
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
 }

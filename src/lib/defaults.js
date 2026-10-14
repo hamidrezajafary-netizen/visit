@@ -1,33 +1,36 @@
 /**
  * Default card content.
  *
- * Contact details are deliberately left as editable placeholders — no real
- * email, phone number, website or social account is invented anywhere.
+ * Contact details are deliberately editable placeholders — no real email, phone
+ * number, website, address or social handle is invented anywhere.
  *
- * `status` keeps the card honest about the prototype: the platform's browser AI
+ * `status` keeps the card honest about the prototype: the browser AI
  * receptionist and order/booking flows are built and manually tested, while
- * production telephony, multi-tenant and in-store translation are still planned.
+ * production telephony, multi-tenant provisioning and in-store translation are
+ * still planned. It is hidden by default so the card can present as a pure
+ * brand piece, and it is one click away in the panel.
  */
 export const DEFAULT_CARD = {
   company: 'Maison AI',
   supporting: 'AI-Powered Customer Experience Platform',
   tagline: 'Make Every Customer Feel Understood.',
-  name: 'Vahidreza Jafary',
-  title: 'Senior Cloud Architect | Founder',
-  services: 'AI Receptionist · Multilingual Assistance · Smart Commerce',
-  email: '[Your Email]',
+  name: '[Your Full Name]',
+  title: '[Your Job Title]',
   phone: '[Your Phone Number]',
+  email: '[Your Email Address]',
   website: '[Your Website]',
-  location: 'Tampere, Finland',
+  social: '[Your Instagram or LinkedIn]',
+  address: '[Your Business Address]',
   status: 'Working prototype · Piloting in Tampere',
-  showStatus: true,
+  showStatus: false,
   qrCaption: 'Scan to view the live demo',
 };
 
+/** Deep black-purple with champagne gold, per the reference direction. */
 export const DEFAULT_BRAND = {
-  primary: '#0A1830',
-  accent: '#3D7BFF',
-  surface: '#F5F7FB',
+  primary: '#241429',
+  accent: '#D0AA68',
+  surface: '#241429',
   font: 'Inter',
 };
 
@@ -41,18 +44,21 @@ export const FONT_STACKS = {
 export const FONT_CHOICES = Object.keys(FONT_STACKS);
 
 export const PALETTES = [
-  { name: 'Midnight', primary: '#0A1830', accent: '#3D7BFF', surface: '#F5F7FB' },
-  { name: 'Graphite', primary: '#15181E', accent: '#5B8DEF', surface: '#F4F5F7' },
-  { name: 'Deep Teal', primary: '#062A2E', accent: '#1FB6A6', surface: '#F2F7F6' },
-  { name: 'Ink Plum', primary: '#1B1035', accent: '#8B6BFF', surface: '#F6F4FB' },
+  { name: 'Midnight Plum', primary: '#241429', accent: '#D0AA68', surface: '#241429' },
+  { name: 'Onyx & Gold', primary: '#141118', accent: '#C9A227', surface: '#141118' },
+  { name: 'Deep Amethyst', primary: '#2C1636', accent: '#DCBB8C', surface: '#2C1636' },
+  { name: 'Espresso Bronze', primary: '#221610', accent: '#BE9159', surface: '#221610' },
 ];
 
-/** Print geometry, in millimetres. */
+/** The cream tile the QR code sits on, so it stays scannable on dark stock. */
+export const QR_TILE = '#F7F2E9';
+
+/** Print geometry, in millimetres — 3.5 × 2 in (89 × 51 mm). */
 export const PRINT = {
-  trimWidth: 85,
-  trimHeight: 55,
+  trimWidth: 89,
+  trimHeight: 51,
   bleed: 3,
-  safeMargin: 6,
+  safeMargin: 5,
   get bleedWidth() {
     return this.trimWidth + this.bleed * 2;
   },

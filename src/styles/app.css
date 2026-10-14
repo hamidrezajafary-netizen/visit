@@ -255,16 +255,24 @@ select {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
-  --mm: clamp(2.9px, 0.72vw + 1.4px, 6.6px);
+  --mm: clamp(2.9px, 0.62vw + 1.5px, 6.4px);
 }
 
 .stage.is-both {
-  --mm: clamp(2.2px, 0.42vw + 1.1px, 4.2px);
+  --mm: clamp(2.2px, 0.3vw + 1.4px, 3.8px);
 }
 
 /* mockup backgrounds */
 .scene-plain {
   background: #e7eaf2;
+}
+
+/* dark textured stone with cinematic overhead light */
+.scene-stone {
+  background: radial-gradient(72% 52% at 50% 4%, rgba(255, 236, 205, 0.12), transparent 62%),
+    radial-gradient(120% 96% at 50% 118%, rgba(0, 0, 0, 0.72), transparent 62%),
+    repeating-linear-gradient(128deg, rgba(255, 255, 255, 0.015) 0 2px, transparent 2px 7px),
+    linear-gradient(158deg, #2d2431 0%, #1b1522 46%, #0d0a12 100%);
 }
 
 .scene-studio {
@@ -291,11 +299,64 @@ select {
   gap: 12px;
 }
 
+/* 3D product shot: the card sits on a stack, tilted under studio light. */
+.mockup {
+  position: relative;
+  perspective: 1700px;
+  perspective-origin: 50% 34%;
+}
+
+.mockup-stack {
+  position: relative;
+}
+
+.mockup--3d .mockup-stack {
+  transform: rotateX(7deg) rotateY(-11deg) rotateZ(-1.6deg);
+}
+
+.sheet {
+  position: absolute;
+  inset: 0;
+  border-radius: calc(1.1 * var(--mm));
+}
+
+.sheet--paper {
+  background: #3b2b45;
+  transform: translate(0.5mm, 0.85mm);
+}
+
+/* the gilded card edges of the stack, as in the reference mockup */
+.sheet--gold {
+  background: var(--accent);
+  transform: translate(1mm, 1.7mm);
+}
+
 .card-mock {
+  position: relative;
   border-radius: calc(1.1 * var(--mm));
   overflow: hidden;
-  box-shadow: 0 26px 50px -20px rgba(8, 16, 36, 0.55), 0 6px 16px -8px rgba(8, 16, 36, 0.3),
-    0 0 0 1px rgba(8, 16, 36, 0.06);
+  box-shadow: 0 34px 60px -24px rgba(0, 0, 0, 0.85), 0 10px 22px -10px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+
+/* With print guides on, square corners keep the trim/bleed outlines unclipped. */
+.card-mock--square {
+  border-radius: 0;
+  overflow: visible;
+}
+
+/* soft light pooling on the surface below the stack */
+.mockup--3d::after {
+  content: '';
+  position: absolute;
+  left: 2%;
+  right: 2%;
+  top: 100%;
+  height: calc(16 * var(--mm));
+  background: linear-gradient(180deg, rgba(255, 245, 225, 0.13), rgba(255, 245, 225, 0) 72%);
+  filter: blur(9px);
+  z-index: -1;
+  pointer-events: none;
 }
 
 .stage-item figcaption {
@@ -307,8 +368,9 @@ select {
 }
 
 .scene-dark .stage-item figcaption,
-.scene-desk .stage-item figcaption {
-  color: #97a3ba;
+.scene-desk .stage-item figcaption,
+.scene-stone .stage-item figcaption {
+  color: #9c8fa4;
 }
 
 .stage-foot {
@@ -563,10 +625,10 @@ select {
   }
 
   .stage {
-    --mm: clamp(2.6px, 0.94vw + 0.9px, 5px);
+    --mm: clamp(2.4px, 0.58vw + 1.1px, 5px);
   }
 
   .stage.is-both {
-    --mm: clamp(2.1px, 0.76vw + 0.6px, 4.2px);
+    --mm: clamp(2.1px, 0.44vw + 0.8px, 3.6px);
   }
 }

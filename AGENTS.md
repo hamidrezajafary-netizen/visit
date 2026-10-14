@@ -32,29 +32,53 @@ Vite answers on port 3000.
   drives every size through `calc(n * var(--mm))`. Changing `--mm` scales the
   whole card, which is how the on-screen preview and the 300 DPI export render
   from identical markup. Do not convert these values to px.
-- **Geometry:** trim 85 × 55 mm, bleed 3 mm (canvas 91 × 61 mm), safe margin
-  6 mm. Defined once in `src/lib/defaults.js` (`PRINT`) and mirrored in
-  `src/styles/card.css`. Keep the two in sync.
+- **Geometry:** trim 89 × 51 mm (3.5 × 2 in), bleed 3 mm (canvas 95 × 57 mm),
+  safe margin 5 mm. Defined once in `src/lib/defaults.js` (`PRINT`) and mirrored
+  in `src/styles/card.css`. Keep the two in sync.
+- **The preview scale clamps in `src/styles/app.css` are tied to the trim size.**
+  They are tuned so the 89 mm trim always fits inside the stage at every
+  breakpoint. If the trim size changes, retune those `--mm` clamps — a page-level
+  "no horizontal scroll" check will NOT catch a too-large card, because `.stage`
+  has `overflow: hidden` and silently clips it instead. Check
+  `.stage` `scrollWidth - clientWidth`, or the card's rect against the stage rect.
+- **The gilded strip must bleed.** `.card-bleed--back::before` extends the strip
+  colour past the trim on all sides, because the strip sits on the trim edge and
+  would otherwise leave a purple sliver after cutting. It is painted behind
+  `.card-trim` (which is opaque over the trim area) and matches the strip's base
+  colour exactly, so the two cannot seam. Keep the foil sheen
+  (`.back-strip::before`) inside the trim for the same reason.
+- **Padding lives on the faces, not on `.card-trim`.** Absolute children of
+  `.card-trim` would otherwise be inset by that padding and could not reach the
+  trim edge, which the strip needs. `.face--back` is unpadded so `.back-lattice`
+  and `.back-strip` can bleed.
 - **Two export capture targets.** The print PDF captures the bleed element
-  (`.card-bleed`, 91 × 61 mm) and the digital PNG captures the trim element
-  (`.card-trim`, 85 × 55 mm) — the trim element therefore needs its own opaque
+  (`.card-bleed`, 95 × 57 mm) and the digital PNG captures the trim element
+  (`.card-trim`, 89 × 51 mm) — the trim element therefore needs its own opaque
   background, or the PNG comes out with transparent edges.
-- **The export rig is always mounted.** Export uses an off-screen copy at a
-  fixed `--mm`, so exporting works from any preview mode. Capturing the visible
-  node instead would fail whenever that side is not currently shown.
+- **The export rig is always mounted and lives outside the mockup.** Export uses
+  an off-screen copy at a fixed `--mm`, so exporting works from any preview mode
+  and is unaffected by the stage's 3D transforms and rounded-corner clipping.
+  Capturing the visible node instead would fail whenever that side is not shown.
+- **Print guides force square corners** (`.card-mock--square`): the mockup's
+  rounded-corner clip otherwise shaves the trim/bleed outlines.
 - Export uses `html-to-image` with `pixelRatio`, which raises the canvas
   resolution without touching computed styles — this avoids reflow/scale bugs.
-  Fonts are bundled via `@fontsource`, which keeps them same-origin and
-  therefore embeddable in the export.
+  Fonts are bundled via `@fontsource`, which keeps them same-origin and therefore
+  embeddable in the export.
+- **Avoid `background-clip: text` for the gold foil lettering.** It is fragile
+  under html-to-image cloning and fails invisibly (transparent text). Gold is a
+  solid colour plus emboss text-shadows and a sheen overlay instead.
 - Sandbox-only settings in `vite.config.js` (allowed hosts, wss HMR on 443,
   polling watcher) are gated on `BASE44_PREVIEW_MODE === '1'` and are absent
   outside the preview.
 
 ## Content integrity
 
-Contact details on the card are deliberately editable placeholders
-(`[Your Email]`, …). Never fill in invented emails, phone numbers or web
-addresses. The status line on the back of the card exists to separate what is
-built (browser AI receptionist, storefront, order/booking flows) from what is
-planned (production telephony, multi-tenant provisioning, in-store
-translation) — keep that distinction whenever card copy is edited.
+- Contact details, the address and the social handle are deliberately editable
+  placeholders (`[Your Email Address]`, …). Never fill in invented emails, phone
+  numbers, web addresses or social accounts.
+- The prototype status line is **off by default** so the card presents as a pure
+  brand piece, but the control is kept: the platform's browser AI receptionist,
+  storefront and order/booking flows are built and manually tested, while
+  production telephony, multi-tenant provisioning and in-store translation are
+  planned, not deployed. Do not add copy that presents the planned parts as live.

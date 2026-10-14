@@ -4,7 +4,7 @@ import ControlPanel from './components/ControlPanel.jsx';
 import LogoMark from './components/LogoMark.jsx';
 import PreviewStage from './components/PreviewStage.jsx';
 import { luminance, mix, readableInk, withAlpha } from './lib/color.js';
-import { DEFAULT_BRAND, DEFAULT_CARD, FONT_STACKS, PRINT } from './lib/defaults.js';
+import { DEFAULT_BRAND, DEFAULT_CARD, FONT_STACKS, PRINT, QR_TILE } from './lib/defaults.js';
 import { exportPdf, exportPng } from './lib/exporters.js';
 import { makeQr } from './lib/qr.js';
 
@@ -12,8 +12,8 @@ export default function App() {
   const [card, setCard] = useState(DEFAULT_CARD);
   const [brand, setBrand] = useState(DEFAULT_BRAND);
   const [view, setView] = useState('both');
-  const [scene, setScene] = useState('studio');
-  const [guides, setGuides] = useState(true);
+  const [scene, setScene] = useState('stone');
+  const [guides, setGuides] = useState(false);
   const [qrUrl, setQrUrl] = useState('');
   const [qrDataUrl, setQrDataUrl] = useState(null);
   const [busy, setBusy] = useState('');
@@ -26,22 +26,30 @@ export default function App() {
   const bleedBack = useRef(null);
 
   const theme = useMemo(() => {
-    const ink = readableInk(brand.primary);
+    const onPrimary = readableInk(brand.primary);
+    const onSurface = readableInk(brand.surface);
     return {
       '--primary': brand.primary,
-      '--accent': brand.accent,
       '--surface': brand.surface,
-      '--on-primary': ink,
-      '--on-primary-muted': withAlpha(ink, 0.74),
-      '--on-surface': brand.primary,
-      '--on-surface-muted': mix(brand.primary, brand.surface, 0.45),
-      '--hairline': withAlpha(brand.primary, 0.16),
+      '--accent': brand.accent,
+      '--accent-light': mix(brand.accent, '#FFFFFF', 0.34),
+      '--accent-dark': mix(brand.accent, '#000000', 0.34),
+      // Dark ink for text sitting on the gold strip, so it stays legible whatever
+      // accent the user picks.
+      '--strip-ink': mix(brand.accent, '#000000', 0.75),
+      '--qr-tile': QR_TILE,
+      '--on-primary': onPrimary,
+      '--on-primary-muted': withAlpha(onPrimary, 0.62),
+      '--on-surface': onSurface,
+      '--on-surface-muted': withAlpha(onSurface, 0.6),
+      '--hairline': withAlpha(brand.accent, 0.3),
+      '--gold-soft': withAlpha(brand.accent, 0.16),
       '--font': FONT_STACKS[brand.font] || FONT_STACKS.Inter,
     };
   }, [brand]);
 
-  // Regenerate the QR whenever the destination changes. An empty value restores
-  // the placeholder frame, so the card is never left showing a stale code.
+  // Regenerate the QR whenever the destination changes. An empty value removes
+  // the tile entirely, so the card presents cleanly without one.
   useEffect(() => {
     const value = qrUrl.trim();
     if (!value) {
@@ -50,8 +58,8 @@ export default function App() {
     }
     let active = true;
     const timer = setTimeout(() => {
-      const dark = luminance(brand.primary) < 0.45 ? brand.primary : '#111827';
-      makeQr(value, { dark })
+      const dark = luminance(brand.primary) < 0.45 ? brand.primary : '#2A2438';
+      makeQr(value, { dark, light: QR_TILE })
         .then((url) => {
           if (active) setQrDataUrl(url);
         })
@@ -103,12 +111,10 @@ export default function App() {
     setQrUrl('');
   };
 
-  const exportRigCard = { ...card, qrCaption: card.qrCaption };
-
   return (
     <div className="app">
       <header className="app-header">
-        <div className="brand-lockup">
+        <div className="brand-lockup" style={{ '--accent': brand.accent }}>
           <LogoMark className="brand-mark" />
           <div>
             <p className="brand-name">Maison AI</p>
@@ -171,9 +177,10 @@ export default function App() {
 
       <footer className="app-foot">
         <p>
-          The live browser AI receptionist, storefront and order/booking flows are built and
-          manually tested. Production telephony, multi-tenant provisioning and in-store
-          translation are planned, not deployed — the status line on the back states this.
+          Printed on thick soft-touch matte stock; the emblem, wordmark, rules and address strip are
+          built as gold foil. The live browser AI receptionist, storefront and order/booking flows
+          are built and manually tested — production telephony, multi-tenant provisioning and
+          in-store translation are planned, not deployed.
         </p>
         <p className="app-foot-meta">
           Trim {PRINT.trimWidth} × {PRINT.trimHeight} mm · bleed {PRINT.bleed} mm · safe margin{' '}
@@ -186,7 +193,7 @@ export default function App() {
       <div className="export-rig" aria-hidden="true">
         <BusinessCard
           side="front"
-          card={exportRigCard}
+          card={card}
           theme={theme}
           qrDataUrl={qrDataUrl}
           bleedRef={bleedFront}
@@ -194,7 +201,7 @@ export default function App() {
         />
         <BusinessCard
           side="back"
-          card={exportRigCard}
+          card={card}
           theme={theme}
           qrDataUrl={qrDataUrl}
           bleedRef={bleedBack}

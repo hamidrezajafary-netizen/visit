@@ -1,20 +1,22 @@
-import LogoMark from './LogoMark.jsx';
-import NetworkMotif from './NetworkMotif.jsx';
+import AiMark from './AiMark.jsx';
 
-/** Front of the card: mark, brand name, supporting line and tagline. */
+/**
+ * Front: a single centred gold emblem over the deep purple stock, with the
+ * MAISON AI wordmark lockup in the lower centre.
+ */
 export default function CardFront({ card }) {
   return (
     <div className="face face--front">
-      <NetworkMotif />
-      <header className="front-head">
-        <LogoMark className="front-logo" />
-      </header>
-      <div className="front-body">
-        <h1 className="front-wordmark">{card.company}</h1>
-        <p className="front-supporting">{card.supporting}</p>
-        <span className="front-rule" />
-        <p className="front-tagline">{card.tagline}</p>
-      </div>
+      <AiMark className="front-mark" />
+
+      <h1 className="front-wordmark">{card.company}</h1>
+      <p className="front-supporting">{card.supporting}</p>
+
+      <span className="front-rule" aria-hidden="true">
+        <i />
+      </span>
+
+      <p className="front-tagline">{card.tagline}</p>
     </div>
   );
 }

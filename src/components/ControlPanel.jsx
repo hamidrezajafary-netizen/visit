@@ -26,15 +26,7 @@ function Section({ title, children }) {
 }
 
 /** All editing controls. Nothing here is required to view the card. */
-export default function ControlPanel({
-  card,
-  onCard,
-  brand,
-  onBrand,
-  qrUrl,
-  onQrUrl,
-  onReset,
-}) {
+export default function ControlPanel({ card, onCard, brand, onBrand, qrUrl, onQrUrl, onReset }) {
   const setCard = (key) => (value) => onCard({ ...card, [key]: value });
   const setBrand = (key) => (value) => onBrand({ ...brand, [key]: value });
 
@@ -47,15 +39,8 @@ export default function ControlPanel({
       </Section>
 
       <Section title="Contact">
-        <Field label="Name" value={card.name} onChange={setCard('name')} />
+        <Field label="Full name" value={card.name} onChange={setCard('name')} />
         <Field label="Job title" value={card.title} onChange={setCard('title')} />
-        <Field label="Services" value={card.services} onChange={setCard('services')} />
-        <Field
-          label="Email"
-          value={card.email}
-          onChange={setCard('email')}
-          placeholder="name@example.com"
-        />
         <Field
           label="Phone"
           value={card.phone}
@@ -63,12 +48,29 @@ export default function ControlPanel({
           placeholder="+358 …"
         />
         <Field
+          label="Email"
+          value={card.email}
+          onChange={setCard('email')}
+          placeholder="name@example.com"
+        />
+        <Field
           label="Website"
           value={card.website}
           onChange={setCard('website')}
           placeholder="example.com"
         />
-        <Field label="Location" value={card.location} onChange={setCard('location')} />
+        <Field
+          label="Social media"
+          value={card.social}
+          onChange={setCard('social')}
+          placeholder="@yourhandle"
+        />
+        <Field
+          label="Address"
+          value={card.address}
+          onChange={setCard('address')}
+          hint="Shown in the gold strip along the bottom of the back."
+        />
       </Section>
 
       <Section title="QR code">
@@ -77,13 +79,9 @@ export default function ControlPanel({
           value={qrUrl}
           onChange={onQrUrl}
           placeholder="https://example.com"
-          hint="Leave empty to keep the placeholder frame."
+          hint="Optional — the QR tile only appears once a destination is set."
         />
-        <Field
-          label="QR caption"
-          value={card.qrCaption}
-          onChange={setCard('qrCaption')}
-        />
+        <Field label="QR caption" value={card.qrCaption} onChange={setCard('qrCaption')} />
       </Section>
 
       <Section title="Brand">
@@ -109,7 +107,6 @@ export default function ControlPanel({
               >
                 <span className="swatch" style={{ background: palette.primary }} />
                 <span className="swatch" style={{ background: palette.accent }} />
-                <span className="swatch swatch--light" style={{ background: palette.surface }} />
               </button>
             );
           })}
@@ -117,7 +114,7 @@ export default function ControlPanel({
 
         <div className="color-row">
           <label className="color-field">
-            <span className="field-label">Navy / primary</span>
+            <span className="field-label">Deep purple / front</span>
             <span className="color-input">
               <input
                 type="color"
@@ -128,7 +125,7 @@ export default function ControlPanel({
             </span>
           </label>
           <label className="color-field">
-            <span className="field-label">Electric blue accent</span>
+            <span className="field-label">Champagne gold accent</span>
             <span className="color-input">
               <input
                 type="color"
@@ -139,7 +136,7 @@ export default function ControlPanel({
             </span>
           </label>
           <label className="color-field">
-            <span className="field-label">Back surface</span>
+            <span className="field-label">Back background</span>
             <span className="color-input">
               <input
                 type="color"
@@ -171,20 +168,20 @@ export default function ControlPanel({
         </button>
       </Section>
 
-      <Section title="Status line">
+      <Section title="Prototype status line">
         <label className="switch">
           <input
             type="checkbox"
             checked={card.showStatus}
             onChange={(e) => setCard('showStatus')(e.target.checked)}
           />
-          <span>Show prototype status on the back</span>
+          <span>Show on the back</span>
         </label>
         <Field
           label="Status text"
           value={card.status}
           onChange={setCard('status')}
-          hint="Keeps the card honest about what is built vs. planned."
+          hint="Off by default. Keeps the card honest about what is built vs. planned."
         />
       </Section>
     </aside>
