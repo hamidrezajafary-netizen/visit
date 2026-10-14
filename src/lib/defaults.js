@@ -43,6 +43,13 @@ export const FONT_STACKS = {
 
 export const FONT_CHOICES = Object.keys(FONT_STACKS);
 
+/**
+ * Refined serif reserved for the front wordmark — the rest of the card keeps the
+ * user's own typography choice. Bundled via @fontsource so it stays same-origin
+ * and therefore embeds in the PNG/PDF export.
+ */
+export const DISPLAY_FONT = "'Cormorant Garamond', Georgia, 'Times New Roman', serif";
+
 export const PALETTES = [
   { name: 'Midnight Plum', primary: '#241429', accent: '#D0AA68', surface: '#241429' },
   { name: 'Onyx & Gold', primary: '#141118', accent: '#C9A227', surface: '#141118' },

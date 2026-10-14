@@ -118,14 +118,15 @@
 }
 
 .front-wordmark {
-  margin: calc(2.5 * var(--mm)) -0.24em 0 0;
-  font-size: calc(5.6 * var(--mm));
-  font-weight: 800;
-  letter-spacing: 0.24em;
+  margin: calc(2.2 * var(--mm)) -0.14em 0 0;
+  font-family: var(--font-display);
+  font-size: calc(5 * var(--mm));
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   line-height: 1;
   color: var(--accent);
-  text-shadow: 0 0.07em 0.02em rgba(0, 0, 0, 0.5), 0 -0.035em 0.02em rgba(255, 255, 255, 0.16);
+  text-shadow: 0 0.06em 0.02em rgba(0, 0, 0, 0.45), 0 -0.03em 0.02em rgba(255, 255, 255, 0.14);
 }
 
 .front-supporting {
@@ -157,8 +158,9 @@
   box-shadow: 0 0 0 calc(0.75 * var(--mm)) var(--card-bg);
 }
 
+/* sits directly beneath the wordmark, per the brand direction */
 .front-tagline {
-  margin: 0;
+  margin: calc(1.7 * var(--mm)) 0 0;
   font-size: calc(2.4 * var(--mm));
   font-weight: 500;
   letter-spacing: 0.04em;
@@ -177,11 +179,11 @@
 .back-lattice {
   position: absolute;
   top: calc(-6 * var(--mm));
-  right: calc(-8 * var(--mm));
-  width: calc(58 * var(--mm));
+  left: calc(-10 * var(--mm));
+  width: calc(110 * var(--mm));
   height: auto;
   color: var(--accent);
-  opacity: 0.17;
+  opacity: 0.12;
 }
 
 .back-inner {

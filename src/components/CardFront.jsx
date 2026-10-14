@@ -10,13 +10,13 @@ export default function CardFront({ card }) {
       <AiMark className="front-mark" />
 
       <h1 className="front-wordmark">{card.company}</h1>
-      <p className="front-supporting">{card.supporting}</p>
+      <p className="front-tagline">{card.tagline}</p>
 
       <span className="front-rule" aria-hidden="true">
         <i />
       </span>
 
-      <p className="front-tagline">{card.tagline}</p>
+      <p className="front-supporting">{card.supporting}</p>
     </div>
   );
 }

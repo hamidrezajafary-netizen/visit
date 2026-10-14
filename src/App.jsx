@@ -4,7 +4,14 @@ import ControlPanel from './components/ControlPanel.jsx';
 import LogoMark from './components/LogoMark.jsx';
 import PreviewStage from './components/PreviewStage.jsx';
 import { luminance, mix, readableInk, withAlpha } from './lib/color.js';
-import { DEFAULT_BRAND, DEFAULT_CARD, FONT_STACKS, PRINT, QR_TILE } from './lib/defaults.js';
+import {
+  DEFAULT_BRAND,
+  DEFAULT_CARD,
+  DISPLAY_FONT,
+  FONT_STACKS,
+  PRINT,
+  QR_TILE,
+} from './lib/defaults.js';
 import { exportPdf, exportPng } from './lib/exporters.js';
 import { makeQr } from './lib/qr.js';
 
@@ -45,6 +52,7 @@ export default function App() {
       '--hairline': withAlpha(brand.accent, 0.3),
       '--gold-soft': withAlpha(brand.accent, 0.16),
       '--font': FONT_STACKS[brand.font] || FONT_STACKS.Inter,
+      '--font-display': DISPLAY_FONT,
     };
   }, [brand]);
 

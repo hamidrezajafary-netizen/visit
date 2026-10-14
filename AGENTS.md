@@ -65,6 +65,12 @@ Vite answers on port 3000.
   resolution without touching computed styles — this avoids reflow/scale bugs.
   Fonts are bundled via `@fontsource`, which keeps them same-origin and therefore
   embeddable in the export.
+- **The front wordmark has its own bundled serif** (`DISPLAY_FONT` — Cormorant
+  Garamond, imported in `src/main.jsx`, applied as `--font-display`). It is
+  deliberately independent of the Typography selector, which only drives the body
+  font (`--font`); do not "fix" it to follow `--font`. Front order is emblem →
+  wordmark → tagline → rule → supporting line, so the tagline sits directly
+  beneath the wordmark.
 - **Avoid `background-clip: text` for the gold foil lettering.** It is fragile
   under html-to-image cloning and fails invisibly (transparent text). Gold is a
   solid colour plus emboss text-shadows and a sheen overlay instead.
